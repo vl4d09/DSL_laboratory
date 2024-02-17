@@ -122,7 +122,11 @@ class FiniteAutomaton:
         return current_state in self.accept_states  # Check if the final state is an accept state
 ```
 
-In this part, we define a function `grammar_to_finite_automaton` that converts the grammar into a finite automaton (FA). The FA has states, alphabet, transitions, start state, and accept states. We also define the `FiniteAutomaton` class to work with FAs, including a method `accepts` to check if a given string is accepted by the FA.
+In this part, we define a function `grammar_to_finite_automaton` that converts the grammar into a finite automaton (FA). The FA has states, alphabet, transitions, start state, and accept states. We also define the `FiniteAutomaton` class to work with FAs, including a method `accepts` to check if a given string is accepted by the FA. The function works by creating a state for each non-terminal symbol in the grammar, and an additional state for the start symbol. The function then adds transitions between the states according to the production rules in the grammar.
+
+ For example, the production rule "S -> aA" would create a transition from the start state to the state "A" labeled with the symbol "a".
+
+ The code then creates a FiniteAutomaton object from the grammar and uses it to test whether or not a few strings are accepted by the grammar.
 
 ### Part 3: Testing Strings with the Finite Automaton
 
@@ -137,26 +141,22 @@ for string in test_strings:
         print(f"String '{string}' is not accepted by the FA")
 ```
 
-In this part, we test several strings using the FA generated from the grammar. For each test string, we convert the grammar to an FA and check if the FA accepts the string, printing the result.
+The code then creates a FiniteAutomaton object from the grammar and uses it to test whether or not a few strings are accepted by the grammar. In this part, we test several strings using the FA generated from the grammar. For each test string, we convert the grammar to an FA and check if the FA accepts the string, printing the result. 
 
 
 ## Conclusions and Results
-In this laboratory, I successfully implemented a Grammar class to represent formal grammar and performed various tasks 
-related to grammar analysis and finite automaton conversion. Here's a summary of my key accomplishments:
 
-- Grammar Implementation
-  
-I designed a Grammar class that encapsulates the essential elements of formal grammar, including non-terminals, terminals, 
-a start symbol, and production rules. This class provides a convenient way to manipulate these components.
+This project was a great introduction to the world of formal languages! Here's what we achieved:
 
-- String Generation
-  
-I implemented a function to generate 5 valid strings from the language expressed by the given grammar. The string generation logic is adaptable based on the rules defined in the grammar.
+* **Grammar Rules:** We clearly defined the "recipe" for creating valid sentences in our language. This involved symbols and production rules.
+* **Building a Language Generator:** We wrote code that uses our grammar recipe to make random, correct sentences. 
+* **The Machine Translator:** We created a program that turns our grammar into a special machine (a finite automaton).  This machine is like a language checker.
+* **Testing Time:** We fed some test sentences to our machine to see if it recognized them as part of our language.
 
-- Finite Automaton Conversion
+**What's Next?**
 
-I developed functionality to convert an object of type Grammar to an object of type Finite Automaton. This involved creating a FiniteAutomaton class with states, an alphabet, transitions, and a method to check if an input string is accepted.
+* **Bigger Challenges:** We could try this with more complex languages.
+* **Faster Machine:**  Can we make our language-checking machine work even faster?
+* **Cool Projects:** The things we learned here could help us build parts of compilers (for programming languages) or tools to understand everyday language better.
 
-- String Acceptance by Finite Automaton
-  
-I implemented a method in the Finite Automaton class to check if an input string can be obtained via state transitions. The implementation considered the transition rules defined by the grammar and traversed the automaton accordingly.
+Overall, this project gave me a strong foundation in how to define languages and build tools to check them.  This is a cool starting point for exploring other language-related projects! 
