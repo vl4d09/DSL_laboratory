@@ -32,7 +32,6 @@
 
 ## Implementation description
 
-Certainly! Let's break down the code into more detailed parts and explain each one in detail.
 
 ### Part 1: Grammar Definition and Grammar Class
 
