@@ -2,7 +2,6 @@
 
 ### Course: Formal Languages & Finite Automata
 ### Author: Ungureanu Vlad
-
 ----
 
 ## Overview
