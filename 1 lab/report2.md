@@ -2,7 +2,6 @@
 
 ### Course: Formal Languages & Finite Automata
 ### Author: Ungureanu Vlad
-
 ----
 
 ## Overview
@@ -203,6 +202,8 @@ class Grammar:
 
         return "Type-2 (Context-Free)"  # Placeholder, replace with actual logic
 ```
+**Visual Implementation**
+![visualLab2](https://github.com/vl4d09/DSL_laboratory/assets/114349433/280f3df7-1d77-446e-affc-ad70646a8b9d)
 
 
 **Conclusion**
