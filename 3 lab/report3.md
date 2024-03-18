@@ -7,7 +7,25 @@
 ## Overview
 &ensp;&ensp;&ensp; The term lexer comes from lexical analysis which, in turn, represents the process of extracting lexical tokens from a string of characters. There are several alternative names for the mechanism called lexer, for example tokenizer or scanner. The lexical analysis is one of the first stages used in a compiler/interpreter when dealing with programming, markup or other types of languages.
 &ensp;&ensp;&ensp; The tokens are identified based on some rules of the language and the products that the lexer gives are called lexemes. So basically the lexer is a stream of lexemes. Now in case it is not clear what's the difference between lexemes and tokens, there is a big one. The lexeme is just the byproduct of splitting based on delimiters, for example spaces, but the tokens give names or categories to each lexeme. So the tokens don't retain necessarily the actual value of the lexeme, but rather the type of it and maybe some metadata.
+A lexer, short for lexical analyzer, is a fundamental component of a compiler or interpreter. Its primary role is to break down the input source code into smaller meaningful units called tokens. These tokens serve as the basic building blocks for subsequent stages of compilation or interpretation.
 
+Here's an overview of the theory behind lexers:
+
+1. **Tokenization**: The lexer processes the input source code character by character, identifying and categorizing sequences of characters into tokens. Each token represents a distinct lexical unit in the programming language, such as keywords, identifiers, literals, operators, and punctuation symbols.
+
+2. **Regular Expressions**: Lexers typically employ regular expressions to define patterns that match different token types. These patterns describe the syntactic structure of tokens, allowing the lexer to recognize and extract them from the input stream efficiently.
+
+3. **Finite Automata**: Underlying many lexer implementations is the concept of finite automata. Finite automata provide a formal model for recognizing patterns in strings. Lexers often use finite automata to efficiently process input characters and transition between different states based on the encountered symbols.
+
+4. **Token Types**: Tokens are classified into different types based on their syntactic role within the programming language. Common token types include identifiers, keywords, literals (such as numbers and strings), operators, punctuation symbols, and special symbols (such as parentheses and brackets).
+
+5. **Whitespace and Comments**: Lexers typically handle whitespace characters (such as spaces, tabs, and newline characters) and comments separately from other tokens. They may choose to ignore whitespace or include it as a distinct token depending on the language's syntax requirements.
+
+6. **Error Handling**: Lexers must also handle invalid input gracefully. When encountering unrecognized characters or sequences that do not match any defined token pattern, the lexer may generate error tokens or raise exceptions to indicate lexical errors in the source code.
+
+7. **Output**: Once the lexer has processed the entire input source code, it generates a stream of tokens representing the lexical structure of the program. This token stream serves as input for subsequent stages of compilation or interpretation, such as parsing and semantic analysis.
+
+Overall, the lexer plays a crucial role in the compilation or interpretation process by converting raw source code into a structured representation that can be further analyzed and processed by subsequent components of the compiler or interpreter.
 
 ## Objectives:
 1. Understand what lexical analysis [1] is.
@@ -21,21 +39,26 @@ The provided code implements a lexer for arithmetic expressions. A lexer breaks 
 
 **Code Example:**
 
+### Part 1: TokenType Enum
 ```python
-class Grammar:
-    from enum import Enum
-from typing import List
+from enum import Enum
 
-# Enum defining different types of tokens
 class TokenType(Enum):
     NUMBER = 0        # Represents numeric values
     OPERATOR = 1      # Represents arithmetic operators (+, -, *, /)
-    LEFT_PAREN = 2    # Represents left parenthesis '('
-    RIGHT_PAREN = 3   # Represents right parenthesis ')'
-    WHITESPACE = 4    # Represents whitespace characters
+    LEFT_P = 2        # Represents left parenthesis '('
+    RIGHT_P = 3       # Represents right parenthesis ')'
+    SPACE = 4         # Represents whitespace characters
     ERROR = 5         # Represents an error token
+```
+Explanation:
+- This part defines an enumeration class `TokenType` using the `Enum` module.
+- It enumerates different types of tokens that can be encountered while lexing an arithmetic expression.
+- Each token type is assigned a unique integer value for identification.
+- The comments provide a brief description of each token type.
 
-# Class representing a token with its type, value, and position in the input string
+### Part 2: Token Class
+```python
 class Token:
     def __init__(self, type: TokenType, value: str, position: int):
         self.type = type
@@ -44,111 +67,48 @@ class Token:
 
     def __str__(self):
         return f"[{self.type}: {self.value}, position: {self.position}]"
+```
+Explanation:
+- This part defines a `Token` class representing a single token with its type, value, and position in the input string.
+- It has an initializer method `__init__` that takes the token type, value, and position as parameters and initializes the corresponding attributes.
+- The `__str__` method returns a string representation of the token for easy printing.
 
-# Class responsible for lexing arithmetic expressions, breaking them down into tokens
+### Part 3: ArithmeticLexer Class
+```python
 class ArithmeticLexer:
     def __init__(self, ignore_whitespace: bool = False):
         self.ignore_whitespace = ignore_whitespace
 
+    # Tokenize method 
+```
+Explanation:
+- This part defines a `ArithmeticLexer` class responsible for lexing arithmetic expressions.
+- It has an initializer method `__init__` that optionally takes a boolean parameter `ignore_whitespace` to indicate whether whitespace should be ignored during tokenization.
+
+### Part 4: Tokenize Method and Helper Methods
+```python
     def tokenize(self, input: str) -> List[Token]:
-        tokens = []  # List to store tokens
-        current_token = ''  # String to build the current token
-        current_position = 0  # Current position in the input string
-        left_paren_count = 0  # Count of left parentheses
-        right_paren_count = 0  # Count of right parentheses
-        last_digit_starting_position = 0  # Starting position of the last digit encountered
+        # Method to tokenize the input string
+        # Other helper methods like add_number_if_needed, create_token, invalid_token_error
+```
+Explanation:
+- This part defines the `tokenize` method within the `ArithmeticLexer` class.
+- The `tokenize` method takes an input string and returns a list of `Token` objects.
+- The actual implementation of the `tokenize` method and other helper methods like `add_number_if_needed`, `create_token`, and `invalid_token_error` are not shown here but are expected to be present to perform the actual tokenization.
 
-        # Iterate through each character in the input string
-        for c in input:
-            if c.isspace():
-                # If whitespace should be ignored, skip to the next character
-                if self.ignore_whitespace:
-                    current_position += 1
-                    continue
-                # Add the current number token if any, and add the whitespace token
-                self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
-                tokens.append(Token(TokenType.WHITESPACE, c, current_position))
-            elif c in ['+', '-', '*', '/']:
-                # Add the current number token if any, and add the operator token
-                self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
-                tokens.append(Token(TokenType.OPERATOR, c, current_position))
-            elif c.isdigit():
-                # If the current token is empty, update the starting position of the last digit encountered
-                if not current_token:
-                    last_digit_starting_position = current_position
-                # Append the digit to the current token
-                current_token += c
-            elif c == '(':
-                # Add the current number token if any, and add the left parenthesis token
-                self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
-                tokens.append(Token(TokenType.LEFT_PAREN, c, current_position))
-                left_paren_count += 1
-            elif c == ')':
-                # Add the current number token if any, and add the right parenthesis token
-                self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
-                right_paren_count += 1
-                # Check if there are more right parentheses than left parentheses
-                if right_paren_count > left_paren_count:
-                    return self.invalid_token_error(c, current_position)
-                tokens.append(Token(TokenType.RIGHT_PAREN, c, current_position))
-            else:
-                return self.invalid_token_error(c, current_position)
-            current_position += 1  # Move to the next position in the input string
-
-        # Check if the number of left parentheses matches the number of right parentheses
-        if left_paren_count != right_paren_count:
-            return self.invalid_token_error("Mismatched parentheses", len(input))
-
-        # Add the current number token if any
-        self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
-
-        return tokens  # Return the list of tokens
-
-    # Method to add the current number token to the list if it's not empty
-    def add_number_if_needed(self, current_token, tokens, last_digit_starting_position):
-        if current_token:
-            tokens.append(self.create_token(current_token, last_digit_starting_position))
-            current_token = ''  # Clear the current token
-
-    # Method to create a token from the provided string and position
-    def create_token(self, token_string, position):
-        if token_string.isdigit():
-            return Token(TokenType.NUMBER, token_string, position)
-        else:
-            return Token(TokenType.ERROR, f"Invalid expression: {token_string} at position {position}.", position)
-
-    # Method to create an error token with the provided message and position
-    def invalid_token_error(self, token, position):
-        return [Token(TokenType.ERROR, f"Invalid expression: {token} at position {position}.", position)]
-
+### Part 5: Example Usage
+```python
 # Example usage
 lexer = ArithmeticLexer()
 tokens = lexer.tokenize("3 + 4 * (2 - 1)")
 for token in tokens:
     print(token)
-
 ```
-**For some test**
-
-```python
-from arithmetic_lexer import ArithmeticLexer
-
-lexer = ArithmeticLexer()
-expressions = [
-    "3 + 4 * (2 - 1)",
-    "10 / (5 - 3) + 2",
-    "1 + 2 + 3 + 4 + 5",
-    "10 / 0"  
-]
-
-for expression in expressions:
-    tokens = lexer.tokenize(expression)
-    print(f"Expression: {expression}")
-    print("Tokens:")
-    for token in tokens:
-        print(token)
-    print()
-```
+Explanation:
+- This part demonstrates an example usage of the `ArithmeticLexer` class.
+- It creates an instance of the `ArithmeticLexer` class.
+- It tokenizes an arithmetic expression `"3 + 4 * (2 - 1)"` using the `tokenize` method.
+- It then iterates over the resulting tokens and prints each token.
 
 **Conclusion**
 
