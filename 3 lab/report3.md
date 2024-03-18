@@ -41,74 +41,80 @@ The provided code implements a lexer for arithmetic expressions. A lexer breaks 
 
 ### Part 1: TokenType Enum
 ```python
-from enum import Enum
-
+# Define different types of tokens
 class TokenType(Enum):
-    NUMBER = 0        # Represents numeric values
+    NUMBER = 0        # Represents numbers
     OPERATOR = 1      # Represents arithmetic operators (+, -, *, /)
     LEFT_P = 2        # Represents left parenthesis '('
     RIGHT_P = 3       # Represents right parenthesis ')'
-    SPACE = 4         # Represents whitespace characters
-    ERROR = 5         # Represents an error token
+    SPACE = 4         # Represents spaces
+    ERROR = 5         # Represents errors
 ```
-Explanation:
-- This part defines an enumeration class `TokenType` using the `Enum` module.
-- It enumerates different types of tokens that can be encountered while lexing an arithmetic expression.
-- Each token type is assigned a unique integer value for identification.
-- The comments provide a brief description of each token type.
+- This part creates a list of categories for the different parts of the input expression, like numbers, operators, parentheses, spaces, and errors.
+- Each category is assigned a number for easy identification.
 
 ### Part 2: Token Class
 ```python
+# Define a class to represent individual tokens
 class Token:
     def __init__(self, type: TokenType, value: str, position: int):
-        self.type = type
-        self.value = value
-        self.position = position
+        self.type = type          # Type of token
+        self.value = value        # Value of token
+        self.position = position  # Position of token in the input string
 
     def __str__(self):
         return f"[{self.type}: {self.value}, position: {self.position}]"
 ```
-Explanation:
-- This part defines a `Token` class representing a single token with its type, value, and position in the input string.
-- It has an initializer method `__init__` that takes the token type, value, and position as parameters and initializes the corresponding attributes.
-- The `__str__` method returns a string representation of the token for easy printing.
+
+- This part defines a structure for each token found during the analysis of the input.
+- Each token has a type (e.g., number, operator), a value (e.g., the actual number or operator symbol), and a position in the input string where it was found.
 
 ### Part 3: ArithmeticLexer Class
 ```python
+# Define a class to analyze arithmetic expressions
 class ArithmeticLexer:
     def __init__(self, ignore_whitespace: bool = False):
         self.ignore_whitespace = ignore_whitespace
 
     # Tokenize method 
 ```
-Explanation:
-- This part defines a `ArithmeticLexer` class responsible for lexing arithmetic expressions.
-- It has an initializer method `__init__` that optionally takes a boolean parameter `ignore_whitespace` to indicate whether whitespace should be ignored during tokenization.
+- This part defines a tool to understand arithmetic expressions.
+- It's prepared to skip spaces during analysis if requested.
 
 ### Part 4: Tokenize Method and Helper Methods
 ```python
-    def tokenize(self, input: str) -> List[Token]:
-        # Method to tokenize the input string
-        # Other helper methods like add_number_if_needed, create_token, invalid_token_error
+    tokens = []  # List to store tokens
+        current_token = ''  # String to build the current token
+        current_position = 0  # Current position in the input string
+        left_paren_count = 0  # Count of left parentheses
+        right_paren_count = 0  # Count of right parentheses
+
+        # Iterate through each character in the input string
+        for c in input:
+            if c.isspace():
+                # If whitespace should be ignored, skip to the next character
+                if self.ignore_whitespace:
+                    current_position += 1
+                    continue
+            elif c in ['+', '-', '*', '/']:
+
 ```
-Explanation:
-- This part defines the `tokenize` method within the `ArithmeticLexer` class.
-- The `tokenize` method takes an input string and returns a list of `Token` objects.
-- The actual implementation of the `tokenize` method and other helper methods like `add_number_if_needed`, `create_token`, and `invalid_token_error` are not shown here but are expected to be present to perform the actual tokenization.
+
+- This part contains the main function that dissects the input string into smaller meaningful parts.
+- There are also some additional functions to help with different aspects of this process, like managing numbers, creating tokens, and dealing with errors.
 
 ### Part 5: Example Usage
 ```python
-# Example usage
-lexer = ArithmeticLexer()
-tokens = lexer.tokenize("3 + 4 * (2 - 1)")
-for token in tokens:
-    print(token)
+# Example of how to use the lexer
+lexer = ArithmeticLexer()                                 # Create a lexer instance
+tokens = lexer.tokenize("3 + 4 * (2 - 1)")                # Tokenize an expression
+for token in tokens:                                      # Iterate over the resulting tokens
+    print(token)                                          # Print each token
 ```
-Explanation:
-- This part demonstrates an example usage of the `ArithmeticLexer` class.
-- It creates an instance of the `ArithmeticLexer` class.
-- It tokenizes an arithmetic expression `"3 + 4 * (2 - 1)"` using the `tokenize` method.
-- It then iterates over the resulting tokens and prints each token.
+- This part demonstrates how to use the lexer in practice.
+- It begins by creating a lexer instance.
+- Then, it tokenizes a sample arithmetic expression.
+- Finally, it displays the resulting tokens.
 
 **Conclusion**
 
