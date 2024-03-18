@@ -5,9 +5,9 @@ from typing import List
 class TokenType(Enum):
     NUMBER = 0        # Represents numeric values
     OPERATOR = 1      # Represents arithmetic operators (+, -, *, /)
-    LEFT_PAREN = 2    # Represents left parenthesis '('
-    RIGHT_PAREN = 3   # Represents right parenthesis ')'
-    WHITESPACE = 4    # Represents whitespace characters
+    LEFT_P = 2    # Represents left parenthesis '('
+    RIGHT_P = 3   # Represents right parenthesis ')'
+    SPACE = 4    # Represents whitespace characters
     ERROR = 5         # Represents an error token
 
 # Class representing a token with its type, value, and position in the input string
@@ -31,7 +31,6 @@ class ArithmeticLexer:
         current_position = 0  # Current position in the input string
         left_paren_count = 0  # Count of left parentheses
         right_paren_count = 0  # Count of right parentheses
-        last_digit_starting_position = 0  # Starting position of the last digit encountered
 
         # Iterate through each character in the input string
         for c in input:
@@ -40,50 +39,45 @@ class ArithmeticLexer:
                 if self.ignore_whitespace:
                     current_position += 1
                     continue
-                # Add the current number token if any, and add the whitespace token
-                self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
-                tokens.append(Token(TokenType.WHITESPACE, c, current_position))
             elif c in ['+', '-', '*', '/']:
-                # Add the current number token if any, and add the operator token
-                self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
+                # Add the current token (number or operator)
+                if current_token:
+                    tokens.append(self.create_token(current_token, current_position))
+                    current_token = ''
                 tokens.append(Token(TokenType.OPERATOR, c, current_position))
             elif c.isdigit():
-                # If the current token is empty, update the starting position of the last digit encountered
-                if not current_token:
-                    last_digit_starting_position = current_position
                 # Append the digit to the current token
                 current_token += c
             elif c == '(':
-                # Add the current number token if any, and add the left parenthesis token
-                self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
-                tokens.append(Token(TokenType.LEFT_PAREN, c, current_position))
+                # Add the current token (number or operator)
+                if current_token:
+                    tokens.append(self.create_token(current_token, current_position))
+                    current_token = ''
+                tokens.append(Token(TokenType.LEFT_P, c, current_position))
                 left_paren_count += 1
             elif c == ')':
-                # Add the current number token if any, and add the right parenthesis token
-                self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
+                # Add the current token (number or operator)
+                if current_token:
+                    tokens.append(self.create_token(current_token, current_position))
+                    current_token = ''
                 right_paren_count += 1
                 # Check if there are more right parentheses than left parentheses
                 if right_paren_count > left_paren_count:
                     return self.invalid_token_error(c, current_position)
-                tokens.append(Token(TokenType.RIGHT_PAREN, c, current_position))
+                tokens.append(Token(TokenType.RIGHT_P, c, current_position))
             else:
                 return self.invalid_token_error(c, current_position)
             current_position += 1  # Move to the next position in the input string
+
+        # Add the last token (number or operator)
+        if current_token:
+            tokens.append(self.create_token(current_token, current_position))
 
         # Check if the number of left parentheses matches the number of right parentheses
         if left_paren_count != right_paren_count:
             return self.invalid_token_error("Mismatched parentheses", len(input))
 
-        # Add the current number token if any
-        self.add_number_if_needed(current_token, tokens, last_digit_starting_position)
-
         return tokens  # Return the list of tokens
-
-    # Method to add the current number token to the list if it's not empty
-    def add_number_if_needed(self, current_token, tokens, last_digit_starting_position):
-        if current_token:
-            tokens.append(self.create_token(current_token, last_digit_starting_position))
-            current_token = ''  # Clear the current token
 
     # Method to create a token from the provided string and position
     def create_token(self, token_string, position):
