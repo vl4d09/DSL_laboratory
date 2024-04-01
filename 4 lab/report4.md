@@ -97,11 +97,11 @@ Through this project, we will showcase the importance and utility of regular exp
                  i += 1
          return current_builder
      ```
-     This function processes alphabetic and digit characters in the regular expression. It handles special characters (^, *, +, ?) and returns the generated string.
+     ### This function processes alphabetic and digit characters in the regular expression. It handles special characters (^, *, +, ?) and returns the generated string.
 
 
    - **`process_opening_parenthesis(regex, i)`**
-     - Processes opening parentheses in the regular expression.
+     - Processes opening parentheses in the regular expression. 
      ```python
      def process_opening_parenthesis(regex, i):
          chars = set()
@@ -120,7 +120,7 @@ Through this project, we will showcase the importance and utility of regular exp
              current_builder = random.choice(list(chars))
          return current_builder, i
      ```
-     This function processes the opening parenthesis ( in the regular expression. It extracts characters within the parentheses, handles the ^ character, and returns the generated string along with the updated index i.
+     ### This function processes the opening parenthesis "(" in the regular expression. It extracts characters within the parentheses, handles the ^ character, and returns the generated string along with the updated index i. So we don't have to worry if an expression is with or without parentheses.
 
 ### Main Function
 
@@ -150,7 +150,7 @@ Through this project, we will showcase the importance and utility of regular exp
    if __name__ == "__main__":
        main()
    ```
-    This function defines the main logic of the program. It sets up three example regular expressions (re1, re2, re3) and prints the generated combinations for each regex five times.
+    ### This function defines the main logic of the program. It sets up three example regular expressions (re1, re2, re3) and prints the generated combinations for each regex five times.
 
 ### Execution
 ```python
@@ -158,7 +158,7 @@ if __name__ == "__main__":
     main()
 ```
 
-This code defines functions to generate combinations based on a regular expression, with detailed explanations of the main logic and helper functions. The `main()` function sets up example regular expressions and generates combinations for each.
+### This code defines functions to generate combinations based on a regular expression, with detailed explanations of the main logic and helper functions. The `main()` function sets up example regular expressions and generates combinations for each.
 
 ## Conclusion
 
