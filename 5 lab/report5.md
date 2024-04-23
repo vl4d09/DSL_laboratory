@@ -207,6 +207,59 @@ This method converts the grammar to Chomsky Normal Form (CNF). It first applies 
 
 ---
 
+
+1. **Initialization**:
+   - The `V_n` variable represents the set of non-terminal symbols, which are symbols that can be replaced by one or more symbols during the derivation process. These symbols are typically denoted by uppercase letters.
+   - The `V_t` variable represents the set of terminal symbols, which are symbols that do not change during the derivation process. These symbols are typically lowercase letters or other characters.
+   - The `S` variable represents the start symbol of the grammar, which is the symbol from which the derivation process begins.
+   - The `P` variable is a dictionary representing the production rules of the grammar. Each key in the dictionary corresponds to a non-terminal symbol, and the corresponding value is a set of strings representing the possible productions for that non-terminal. Each string in the set represents a production rule, where symbols are concatenated to form derivations.
+
+2. **Printing Grammar**:
+   - The `print_variables()` method is responsible for printing out the components of the grammar. It prints the sets of non-terminals and terminals, the start symbol, and the production rules in a readable format.
+
+3. **Checking Grammar Type**:
+   - The `check_type_grammar()` method analyzes the structure of the grammar's production rules to determine its type. It iterates through the production rules and applies various checks to classify the grammar as regular, context-free, context-sensitive, or unrestricted.
+   - The method checks for specific patterns and conditions in the production rules to determine the grammar type.
+
+4. **Converting to Chomsky Normal Form (CNF)**:
+   - **Elimination of Epsilon Productions**:
+     - Epsilon productions are production rules where a non-terminal symbol can derive an empty string (ε).
+     - To eliminate epsilon productions:
+       - Identify nullable non-terminals: Non-terminals that can derive ε are determined by iterating through the production rules and identifying symbols that directly or indirectly lead to ε.
+       - Modify existing productions: For each nullable non-terminal, productions containing it are adjusted to account for its absence. This involves generating all possible combinations of symbols that can be derived from the nullable non-terminal and updating the affected production rules accordingly.
+       - Remove ε-productions: After adjusting the productions, any remaining ε-productions are removed from the grammar.
+   - **Elimination of Unit Productions**:
+     - Unit productions are production rules where a non-terminal symbol directly derives another non-terminal symbol.
+     - To eliminate unit productions:
+       - Identify unit productions: Iterate through the production rules and identify any rules where the right-hand side consists of a single non-terminal symbol.
+       - Expand unit productions: For each unit production, expand it by replacing the non-terminal symbol with the productions it generates. This involves recursively applying this expansion process until only terminal symbols or productions with two non-terminals on the right-hand side remain.
+       - Remove redundant unit productions: After expansion, any redundant unit productions are removed from the grammar.
+   - **Elimination of Unproductive Symbols**:
+     - Unproductive symbols are non-terminal symbols that cannot generate any terminal string.
+     - To eliminate unproductive symbols:
+       - Identify productive symbols: Non-terminals that can generate terminal strings are determined by iteratively exploring the production rules starting from the start symbol.
+       - Remove unproductive symbols: Any non-terminals that are not found to be productive are removed from the grammar along with their associated production rules.
+   - **Elimination of Inaccessible Symbols**:
+     - Inaccessible symbols are non-terminal symbols that cannot be reached from the start symbol.
+     - To eliminate inaccessible symbols:
+       - Identify accessible symbols: Non-terminals that are reachable from the start symbol are determined by traversing the grammar's production rules starting from the start symbol.
+       - Remove inaccessible symbols: Any non-terminals that are not found to be accessible are removed from the grammar along with their associated production rules.
+   - **Conversion of Productions**:
+     - Finally, the production rules are converted to ensure that each production has exactly two symbols on the right-hand side, as required by CNF.
+     - This may involve splitting longer productions into multiple productions, introducing new non-terminal symbols as needed.
+
+Each step of the conversion process ensures that the grammar is progressively transformed into a form that adheres to the requirements of Chomsky Normal Form, ultimately resulting in a grammar suitable for further analysis and processing.
+
+5. **Helper Functions**:
+   - The `powerset()` function generates the powerset of a given iterable. It is used in the elimination of epsilon productions to generate all possible combinations of symbols that can be derived from a non-terminal.
+   - The `Grammar` class encapsulates the functionality related to grammar manipulation and conversion.
+
+6. **Main Logic**:
+   - The main logic resides within the methods of the `Grammar` class. These methods iterate through the production rules and apply transformations based on the desired grammar form or type.
+
+
+---
+
 ## Conclusion:
 
 The conversion of a CFG into Chomsky Normal Form (CNF) is a fundamental process in the study of formal languages and computational theory. CNF simplifies the analysis and manipulation of CFGs, making it easier to determine various properties of context-free languages. Through the systematic application of conversion steps, we can transform a CFG into CNF while preserving the language defined by the original CFG.
