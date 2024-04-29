@@ -201,7 +201,14 @@ The code presented is a simplified implementation of a lexer, parser, and abstra
    - Optimization: Depending on the intended use case, optimizing the lexer, parser, and AST construction process may be necessary to improve performance, especially for large input expressions or high-frequency use scenarios.
 
     Overall, this code serves as a foundational building block for language processing tasks, providing a starting point for implementing more sophisticated compilers, interpreters, or domain-specific languages. Its modular and extensible design allows for further refinement and customization to suit specific requirements and use cases.
----
+    
+    ---
+
+    **Visual**
+    
+    ![outputyo](/6%20lab/output.png)
+
+    ---
 
 ## Conclusion:
 
